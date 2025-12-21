@@ -1,0 +1,21 @@
+First of all we gotta handle these comments # in the file (ignore them, if str[0] == "#" or " "; skip line…)
+
+We create a Stations table called STATIONS = [] (en gros tableau contenant toutes les statoins) it's size will depend on how many stations we will have.
+
+We create an EDGES table, called EDGES, it has the same length of Stations, for every station we have an adjacency list containing all it's neighbors. EXpl => 6 : {7, 13, 53, 108...} (exemple pas vrai mais juste pour illustrer l'idee).
+
+Remarque très importante : Au début on peut réfléchir directement à utiliser des hash-maps (dictionnaire) mais en schématisant mes idées sur papier, je me suis rendu compte que c'est pas la peine d'utiliser un dictionnaire pcq les stations sont identifiées par leures ids qui sont des entiers naturels… GAGNANT ! pas besoin d'allouer plus de mémoire en créant des dictionnaire, seulement des tableaux suffiront.
+
+if str[0] == "S" (fst letter of the line) this means it's a station :
+	we will have to use Strlock to get all the variables 
+	STATIONS[i][0] = id (i); STATIONS[i][1] = name (use strcpy for that)
+
+if str[0] == "E' this means it's an EDGE:
+	use strlock also
+	get the first station, then the second one, add the second station to the neighbors of the first one, example :
+	EDGE;6;53;3 we suppose the sixth station has already an adjacency list like that => 6 : {7, 13} we will add 53 to this list,an end up with a list like 6 : {7, 13, 53} and so on ...
+
+
+Now we have our stations-table with all stations, as well as our edges-adjcency-list containing the neighbors of all the stations, GREAT!
+
+DJIKSTRA enters in the game! time to use these "QUIIIZZ GREEDY" lessons.
