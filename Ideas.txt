@@ -18,4 +18,4 @@ if str[0] == "E' this means it's an EDGE:
 
 Now we have our stations-table with all stations, as well as our edges-adjcency-list containing the neighbors of all the stations, GREAT!
 
-DJIKSTRA enters in the game! time to use these "QUIIIZZ GREEDY" lessons.
+DJIKSTRA enters the game! time to use these "QUIIIZZ GREEDY" lessons.
