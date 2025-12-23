@@ -16,25 +16,127 @@ char** stations;
 int* edge_count;
 
 
+//helper functions
+
+//to find the id of a station if it exists, otherwise it return -1
+int findVertex(char **stations, int size, char *station)
+{
+    station[strcspn(station, "\n")] = '\0'; //dont care abt this line, just to handle a line issue when reading inputs
+
+    int i = 0;
+    while (i < size && stations[i] != NULL && strcmp(stations[i], station) != 0)
+        i++;
+
+    if (i == size || stations[i] == NULL) {
+        printf("didn't found!\n");
+        return -1;
+    }
+
+    return i;
+}
+
+//to find the station who has the minimal distance between the unvisited stations
+//very useful for djikstra alogrithm
+int min_distance(int distances[], bool visited[], int size)
+{
+    int min = INT_MAX, min_index = -1;
+    for (int v = 0; v<size; v++)
+    {
+        if ( !visited[v] && distances[v] <= min )
+        {
+            min = distances[v];
+            min_index = v;
+        }
+    }
+    return min_index;
+}
+
+//fin helper
+
+
+//to get information about a station - it gives also neighbors cuz i misunderstood 
+
 void info_about(char* station)
 {
     station[strcspn(station, "\n")] = '\0';
 
-    int i = 0;
-    while (i < NUM_STATIONS && stations[i] != NULL && strcmp(stations[i], station) != 0)
-        i++;
+    int i = findVertex(stations, 125, station);
+    if (i == -1) return;
 
-    if (i == NUM_STATIONS || stations[i] == NULL) {
-        printf("didn't found!\n");
-        return;
-    }
+    printf("station id : %d, station : %s \n", i, stations[i]);
+    printf("has %d neighbor(s)\n", edge_count[i]);
 
     for (int j = 0; j < edge_count[i]; j++) {
         int dest = adjacency_list[i][j].dest;
         int time = adjacency_list[i][j].time;
-        printf("-> %s (time: %d)\n", stations[dest], time);
+        printf("-> %d : %s (time: %d)\n",dest, stations[dest], time);
     }
 }
+
+//fin info_about
+
+
+
+//Djikstra Hohohooo
+
+void dijkstra(Edge **adjacency_list,char **stations,int *edge_count, int size, char* start, char* end)
+{
+    int start_vertex = findVertex(stations,size, start);
+    int end_vertex = findVertex(stations,size, end);
+
+    if (start_vertex == -1 || end_vertex == -1) {
+        printf("Invalid station name!\n");
+        return;
+    }
+
+
+    int distances[size];
+    bool visited[size];
+    int parent[size];
+
+    for (int i=0; i<size;i++)
+    {
+        distances[i] = INT_MAX;
+        visited[i] = false;
+        parent[i] = -1;
+    }
+    distances[start_vertex] = 0;
+    for (int i=0; i<size -1; i++)
+    {
+        int u=min_distance(distances,visited,size);
+        if (u == -1) break;
+        visited[u] = true;
+        for (int e=0; e< edge_count[u]; e++)
+        {
+            int time = adjacency_list[u][e].time;
+            int neighbor_index = adjacency_list[u][e].dest;
+
+            if (!visited[neighbor_index] &&  distances[neighbor_index] > distances[u] + time)
+            {
+                distances[neighbor_index] = distances[u] + time;
+                parent[neighbor_index] = u;
+            }
+        }
+    }
+    printf("Dijkstra's Algorithm starting from vertex %s to %s:\n\n", start, end);
+
+    printf("Shortest distance from %s to %s: %d \n", start, end, distances[end_vertex]);
+
+    printf("passed by : \n");
+
+    int v = end_vertex;
+    while (v != -1)
+    {
+        printf("-> %s\n", stations[v]);
+        v = parent[v];
+    }
+    printf("\n\n");
+
+}
+
+//Fin Djikstra
+
+
 
 
 
@@ -101,10 +203,39 @@ int main(int argc, char** argv)
     // Close the file
     fclose(fptr);
 
-    char station[100];
-    printf("info about station : ");
-    fgets(station, 100, stdin);
-    info_about(station);
+    printf("===== MENU RESEAU DE TRANSPORT =====\n");
+    printf("1- Afficher les informations d'une station\n");
+    printf("2- Lister les voisins d'une station\n");
+    printf("3- Calculer un chemin minimal\n");
+    printf("4- Afficher les stations triées par degré\n");
+    printf("0- Quitter\n");
+    printf("Votre choix :");
+
+    int choice;
+    scanf(" %d", &choice);
+    getchar();
+
+    switch(choice)
+    {
+        case (1):
+            char station[100];
+            printf("info about station : ");
+            fgets(station, 100, stdin);
+            info_about(station);
+            break;
+
+        case (3):
+            char start[100];
+            printf("your start station : ");
+            fgets(start, 100, stdin);
+            char end[100];
+            printf("your desination : ");
+            fgets(end, 100, stdin);
+            dijkstra(adjacency_list,stations,edge_count, 125 , start, end);
+            break;
+    }
+
+
     
     
 }
