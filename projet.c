@@ -163,7 +163,6 @@ bool *dijkstra_computed = NULL; // hada kay3ti true ila caculé
 
 //dert initialisation dijikstra
 void init_dijkstra_storage() {
-    // Allouer la mémoire pour stocker les résultats Dijkstra
     dijkstra_distances = malloc(NUM_STATIONS * sizeof(int*));
     dijkstra_predecessors = malloc(NUM_STATIONS * sizeof(int*));
     dijkstra_computed = malloc(NUM_STATIONS * sizeof(bool));
