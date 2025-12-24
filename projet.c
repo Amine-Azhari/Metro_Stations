@@ -379,7 +379,7 @@ int main(int argc, char** argv)
             case (2): {
                
                 printf("Nom ou ID de la station : ");
-                fgets(start_input, sizeof(station_input), stdin);
+                fgets(station_input, sizeof(station_input), stdin);
                 list_station_neighbors(station_input);
                 break;
             }
