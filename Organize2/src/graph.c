@@ -23,7 +23,7 @@ void init_dijkstra_storage() {
 }
 
 int find_station(char *input) {
-    input[strcspn(input, "\n")] = '\0';
+    input[strcspn(input, "\r\n")] = '\0';
     
     char *endptr;
     long id = strtol(input, &endptr, 10);
